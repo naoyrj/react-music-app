@@ -1,0 +1,29 @@
+.song {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.song h2{
+    margin-top: 0;
+    color: #0077cc;
+}
+
+.song p{
+    margin: 8px 0;
+}
+
+.song_button {
+    margin-top: 12px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: #0077cc;
+    color: white;
+    cursor: pointer;
+}
+
+.song_button:hover {
+    background-color: #005fa3;
+}

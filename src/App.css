@@ -1,32 +1,18 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   background-color: #f4f4f4;
+  color: #222;
 }
 
 .App {
-  text-align: center;
+  min-height: 100vh;
 }
 
-.header {
-  background-color: #222;
-  color: white;
-  padding: 20px;
-}
-
-.song {
-  background: white;
-  width: 350px;
-  margin: 20px auto;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.song h2 {
-  color: #0077cc;
-}
-
-.song p {
-  margin: 8px 0;
+main {
+  width: 100%;
 }
