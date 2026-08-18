@@ -24,3 +24,23 @@
         grid-template-columns: 1fr;
     }
 }
+
+.search-results__item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.search-results__link {
+  display: block;
+  padding: 10px;
+  border-radius: 6px;
+  background-color: #222;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+}
+
+.search-results__link:hover {
+  background-color: #444;
+}

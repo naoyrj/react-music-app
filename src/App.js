@@ -1,35 +1,48 @@
 import React, { useEffect, useState } from "react";
+import { Routes, Route } from "react-router-dom";
+
 import Header from "./components/Header/Header";
+import SearchBar from "./components/SearchBar/SearchBar";
 import SearchResults from "./components/SearchResults/SearchResults";
 import Library from "./components/Library/Library";
+import SongDetail from "./components/SongDetail/SongDetail";
+import useFetch from "./hooks/useFetch";
+
 import "./App.css";
 
 function App() {
-  const [searchResults] = useState([
-    {
-      id: 1,
-      title: "Blinding Lights",
-      artist: "The Weeknd",
-      album: "After Hours",
-      duration: "3:20"
-    },
-    {
-      id: 2,
-      title: "Adventure of a Lifetime",
-      artist: "Coldplay",
-      album: "A Head Full of Dreams",
-      duration: "4:23"
-    },
-    {
-      id: 3,
-      title: "Titanium",
-      artist: "David Guetta",
-      album: "Nothing but the Beat",
-      duration: "4:05"
-    }
-  ]);
-
+  const [searchTerm, setSearchTerm] = useState("");
   const [library, setLibrary] = useState([]);
+
+  const url = searchTerm
+    ? `https://www.theaudiodb.com/api/v1/json/2/searchalbum.php?s=${encodeURIComponent(
+        searchTerm
+      )}`
+    : null;
+
+  const {
+    data,
+    loading,
+    error,
+    retry
+  } = useFetch(url);
+
+  const songs =
+    data && data.album
+      ? data.album.map((album) => ({
+          id: album.idAlbum,
+          title: album.strAlbum,
+          artist: album.strArtist,
+          album: album.strAlbum,
+          duration: album.intYearReleased
+            ? `Año: ${album.intYearReleased}`
+            : "No disponible"
+        }))
+      : [];
+
+  const handleSearch = (artist) => {
+    setSearchTerm(artist);
+  };
 
   const addToLibrary = (song) => {
     const alreadyAdded = library.some(
@@ -37,7 +50,10 @@ function App() {
     );
 
     if (!alreadyAdded) {
-      setLibrary([...library, song]);
+      setLibrary((currentLibrary) => [
+        ...currentLibrary,
+        song
+      ]);
     }
   };
 
@@ -50,14 +66,66 @@ function App() {
     <div className="App">
       <Header title="🎵 Mi Biblioteca Musical" />
 
-      <main>
-        <SearchResults
-          songs={searchResults}
-          onAdd={addToLibrary}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <main>
+              <SearchBar onSearch={handleSearch} />
+
+              {!searchTerm && (
+                <p className="app__message">
+                  Busca un artista para ver sus álbumes.
+                </p>
+              )}
+
+              {loading && (
+                <p className="app__message">
+                  Cargando...
+                </p>
+              )}
+
+              {error && (
+                <div className="app__error">
+                  <p>
+                    Hubo un problema al cargar los datos.
+                    Intenta nuevamente.
+                  </p>
+
+                  <button onClick={retry}>
+                    Reintentar
+                  </button>
+                </div>
+              )}
+
+              {!loading &&
+                !error &&
+                searchTerm &&
+                songs.length === 0 && (
+                  <p className="app__message">
+                    No se encontraron resultados.
+                  </p>
+                )}
+
+              {!loading &&
+                !error &&
+                songs.length > 0 && (
+                  <SearchResults
+                    songs={songs}
+                    onAdd={addToLibrary}
+                  />
+                )}
+
+              <Library songs={library} />
+            </main>
+          }
         />
 
-        <Library songs={library} />
-      </main>
+        <Route
+          path="/song/:id"
+          element={<SongDetail />}
+        />
+      </Routes>
     </div>
   );
 }
