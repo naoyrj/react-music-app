@@ -1,18 +1,23 @@
 import React from "react";
 import Song from "../Song/Song";
-import "./styles.css";
+import {
+  LibrarySection,
+  LibraryTitle,
+  LibraryList,
+  EmptyMessage
+} from "./styles";
 
 function Library({ songs }) {
   return (
-    <section className="library">
-      <h2>Mi biblioteca</h2>
+    <LibrarySection>
+      <LibraryTitle>Mi biblioteca</LibraryTitle>
 
       {songs.length === 0 ? (
-        <p className="library__empty">
+        <EmptyMessage>
           Todavía no has agregado canciones.
-        </p>
+        </EmptyMessage>
       ) : (
-        <div className="library__list">
+        <LibraryList>
           {songs.map((song) => (
             <Song
               key={song.id}
@@ -23,9 +28,9 @@ function Library({ songs }) {
               showButton={false}
             />
           ))}
-        </div>
+        </LibraryList>
       )}
-    </section>
+    </LibrarySection>
   );
 }
 

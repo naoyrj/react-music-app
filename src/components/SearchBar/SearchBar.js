@@ -1,5 +1,9 @@
 import { useState } from "react";
-import "./styles.css";
+import {
+  SearchForm,
+  SearchInput,
+  SearchButton
+} from "./styles";
 
 function SearchBar({ onSearch }) {
   const [inputValue, setInputValue] = useState("");
@@ -17,22 +21,18 @@ function SearchBar({ onSearch }) {
   };
 
   return (
-    <form className="search-bar" onSubmit={handleSubmit}>
-      <input
+    <SearchForm onSubmit={handleSubmit}>
+      <SearchInput
         type="text"
-        className="search-bar__input"
         value={inputValue}
         onChange={(event) => setInputValue(event.target.value)}
         placeholder="Escribe un artista, por ejemplo Coldplay"
       />
 
-      <button
-        type="submit"
-        className="search-bar__button"
-      >
+      <SearchButton type="submit">
         Buscar
-      </button>
-    </form>
+      </SearchButton>
+    </SearchForm>
   );
 }
 

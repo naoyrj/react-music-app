@@ -8,7 +8,13 @@ import Library from "./components/Library/Library";
 import SongDetail from "./components/SongDetail/SongDetail";
 import useFetch from "./hooks/useFetch";
 
-import "./App.css";
+import {
+  AppContainer,
+  Main,
+  AppMessage,
+  ErrorBox,
+  RetryButton
+} from "./AppStyles";
 
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -63,48 +69,48 @@ function App() {
   }, [library]);
 
   return (
-    <div className="App">
+    <AppContainer>
       <Header title="🎵 Mi Biblioteca Musical" />
 
       <Routes>
         <Route
           path="/"
           element={
-            <main>
+            <Main>
               <SearchBar onSearch={handleSearch} />
 
               {!searchTerm && (
-                <p className="app__message">
+                <AppMessage>
                   Busca un artista para ver sus álbumes.
-                </p>
+                </AppMessage>
               )}
 
               {loading && (
-                <p className="app__message">
+                <AppMessage>
                   Cargando...
-                </p>
+                </AppMessage>
               )}
 
               {error && (
-                <div className="app__error">
+                <ErrorBox>
                   <p>
                     Hubo un problema al cargar los datos.
                     Intenta nuevamente.
                   </p>
 
-                  <button onClick={retry}>
+                  <RetryButton onClick={retry}>
                     Reintentar
-                  </button>
-                </div>
+                  </RetryButton>
+                </ErrorBox>
               )}
 
               {!loading &&
                 !error &&
                 searchTerm &&
                 songs.length === 0 && (
-                  <p className="app__message">
+                  <AppMessage>
                     No se encontraron resultados.
-                  </p>
+                  </AppMessage>
                 )}
 
               {!loading &&
@@ -117,7 +123,7 @@ function App() {
                 )}
 
               <Library songs={library} />
-            </main>
+            </Main>
           }
         />
 
@@ -126,7 +132,7 @@ function App() {
           element={<SongDetail />}
         />
       </Routes>
-    </div>
+    </AppContainer>
   );
 }
 

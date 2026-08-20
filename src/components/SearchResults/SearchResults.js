@@ -1,19 +1,21 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import Song from "../Song/Song";
-import "./styles.css";
+import {
+  ResultsSection,
+  ResultsTitle,
+  ResultsList,
+  ResultItem,
+  DetailLink
+} from "./styles";
 
 function SearchResults({ songs, onAdd }) {
   return (
-    <section className="search-results">
-      <h2>Resultados de búsqueda</h2>
+    <ResultsSection>
+      <ResultsTitle>Resultados de búsqueda</ResultsTitle>
 
-      <div className="search-results__list">
+      <ResultsList>
         {songs.map((song) => (
-          <div
-            key={song.id}
-            className="search-results__item"
-          >
+          <ResultItem key={song.id}>
             <Song
               title={song.title}
               artist={song.artist}
@@ -23,16 +25,13 @@ function SearchResults({ songs, onAdd }) {
               onAdd={() => onAdd(song)}
             />
 
-            <Link
-              to={`/song/${song.id}`}
-              className="search-results__link"
-            >
+            <DetailLink to={`/song/${song.id}`}>
               Ver detalles
-            </Link>
-          </div>
+            </DetailLink>
+          </ResultItem>
         ))}
-      </div>
-    </section>
+      </ResultsList>
+    </ResultsSection>
   );
 }
 

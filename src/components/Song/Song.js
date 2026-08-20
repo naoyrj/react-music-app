@@ -1,20 +1,44 @@
 import React from "react";
-import "./styles.css";
+import {
+  SongCard,
+  SongTitle,
+  SongInfo,
+  SongButton
+} from "./styles";
 
-function Song({ title, artist, album, duration, onAdd, showButton }) {
+function Song({
+  title,
+  artist,
+  album,
+  duration,
+  onAdd,
+  showButton
+}) {
   return (
-    <article className="song">
-      <h2>{title}</h2>
-      <p><strong>Artista:</strong> {artist}</p>
-      <p><strong>Álbum:</strong> {album}</p>
-      <p><strong>Duración:</strong> {duration}</p>
+    <SongCard>
+      <SongTitle>{title}</SongTitle>
+
+      <SongInfo>
+        <strong>Artista:</strong> {artist}
+      </SongInfo>
+
+      <SongInfo>
+        <strong>Álbum:</strong> {album}
+      </SongInfo>
+
+      <SongInfo>
+        <strong>Duración:</strong> {duration}
+      </SongInfo>
 
       {showButton && (
-        <button className="song__button" onClick={onAdd}>
+        <SongButton
+          onClick={onAdd}
+          $active={showButton}
+        >
           Agregar a mi biblioteca
-        </button>
+        </SongButton>
       )}
-    </article>
+    </SongCard>
   );
 }
 

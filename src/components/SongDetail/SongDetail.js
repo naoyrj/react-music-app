@@ -1,12 +1,23 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
-import "./styles.css";
+
+import {
+  DetailSection,
+  DetailCard,
+  AlbumImage,
+  DetailContent,
+  BackLink,
+  DetailMessage,
+  ErrorContainer,
+  RetryButton
+} from "./styles";
 
 function SongDetail() {
   const { id } = useParams();
 
-  const url = `https://www.theaudiodb.com/api/v1/json/2/album.php?m=${id}`;
+  const url =
+    `https://www.theaudiodb.com/api/v1/json/2/album.php?m=${id}`;
 
   const {
     data,
@@ -22,68 +33,58 @@ function SongDetail() {
 
   if (loading) {
     return (
-      <section className="song-detail">
-        <p className="song-detail__message">
-          Cargando...
-        </p>
-      </section>
+      <DetailSection>
+        <DetailMessage>Cargando...</DetailMessage>
+      </DetailSection>
     );
   }
 
   if (error) {
     return (
-      <section className="song-detail">
-        <div className="song-detail__error">
+      <DetailSection>
+        <ErrorContainer>
           <p>
             Hubo un problema al cargar los datos.
           </p>
 
-          <button onClick={retry}>
+          <RetryButton onClick={retry}>
             Reintentar
-          </button>
+          </RetryButton>
 
-          <Link
-            to="/"
-            className="song-detail__back"
-          >
+          <BackLink to="/">
             Volver al inicio
-          </Link>
-        </div>
-      </section>
+          </BackLink>
+        </ErrorContainer>
+      </DetailSection>
     );
   }
 
   if (!album) {
     return (
-      <section className="song-detail">
-        <p className="song-detail__message">
+      <DetailSection>
+        <DetailMessage>
           No se encontró información del álbum.
-        </p>
+        </DetailMessage>
 
-        <Link
-          to="/"
-          className="song-detail__back"
-        >
+        <BackLink to="/">
           Volver al inicio
-        </Link>
-      </section>
+        </BackLink>
+      </DetailSection>
     );
   }
 
   return (
-    <section className="song-detail">
-      <div className="song-detail__card">
+    <DetailSection>
+      <DetailCard>
 
         {album.strAlbumThumb && (
-          <img
+          <AlbumImage
             src={album.strAlbumThumb}
             alt={album.strAlbum}
-            className="song-detail__image"
           />
         )}
 
-        <div className="song-detail__content">
-
+        <DetailContent>
           <h1>{album.strAlbum}</h1>
 
           <p>
@@ -112,16 +113,13 @@ function SongDetail() {
               "No hay descripción disponible."}
           </p>
 
-          <Link
-            to="/"
-            className="song-detail__back"
-          >
+          <BackLink to="/">
             Volver al inicio
-          </Link>
+          </BackLink>
+        </DetailContent>
 
-        </div>
-      </div>
-    </section>
+      </DetailCard>
+    </DetailSection>
   );
 }
 
