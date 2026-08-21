@@ -1,13 +1,25 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import Song from "../Song/Song";
+import { removeSong } from "../../redux/libraryActions";
+
 import {
   LibrarySection,
   LibraryTitle,
   LibraryList,
-  EmptyMessage
+  EmptyMessage,
+  RemoveButton
 } from "./styles";
 
-function Library({ songs }) {
+function Library() {
+  const songs = useSelector((state) => state);
+  const dispatch = useDispatch();
+
+  const handleRemoveSong = (songId) => {
+    dispatch(removeSong(songId));
+  };
+
   return (
     <LibrarySection>
       <LibraryTitle>Mi biblioteca</LibraryTitle>
@@ -19,14 +31,21 @@ function Library({ songs }) {
       ) : (
         <LibraryList>
           {songs.map((song) => (
-            <Song
-              key={song.id}
-              title={song.title}
-              artist={song.artist}
-              album={song.album}
-              duration={song.duration}
-              showButton={false}
-            />
+            <div key={song.id}>
+              <Song
+                title={song.title}
+                artist={song.artist}
+                album={song.album}
+                duration={song.duration}
+                showButton={false}
+              />
+
+              <RemoveButton
+                onClick={() => handleRemoveSong(song.id)}
+              >
+                Eliminar
+              </RemoveButton>
+            </div>
           ))}
         </LibraryList>
       )}

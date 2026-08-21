@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import Header from "./components/Header/Header";
@@ -18,7 +18,6 @@ import {
 
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [library, setLibrary] = useState([]);
 
   const url = searchTerm
     ? `https://www.theaudiodb.com/api/v1/json/2/searchalbum.php?s=${encodeURIComponent(
@@ -49,24 +48,6 @@ function App() {
   const handleSearch = (artist) => {
     setSearchTerm(artist);
   };
-
-  const addToLibrary = (song) => {
-    const alreadyAdded = library.some(
-      (librarySong) => librarySong.id === song.id
-    );
-
-    if (!alreadyAdded) {
-      setLibrary((currentLibrary) => [
-        ...currentLibrary,
-        song
-      ]);
-    }
-  };
-
-  useEffect(() => {
-    console.log("La biblioteca se ha actualizado.");
-    console.log("Canciones en la biblioteca:", library);
-  }, [library]);
 
   return (
     <AppContainer>
@@ -116,13 +97,10 @@ function App() {
               {!loading &&
                 !error &&
                 songs.length > 0 && (
-                  <SearchResults
-                    songs={songs}
-                    onAdd={addToLibrary}
-                  />
+                  <SearchResults songs={songs} />
                 )}
 
-              <Library songs={library} />
+              <Library />
             </Main>
           }
         />

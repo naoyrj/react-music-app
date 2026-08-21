@@ -1,5 +1,9 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+
 import Song from "../Song/Song";
+import { addSong } from "../../redux/libraryActions";
+
 import {
   ResultsSection,
   ResultsTitle,
@@ -8,10 +12,18 @@ import {
   DetailLink
 } from "./styles";
 
-function SearchResults({ songs, onAdd }) {
+function SearchResults({ songs }) {
+  const dispatch = useDispatch();
+
+  const handleAddSong = (song) => {
+    dispatch(addSong(song));
+  };
+
   return (
     <ResultsSection>
-      <ResultsTitle>Resultados de búsqueda</ResultsTitle>
+      <ResultsTitle>
+        Resultados de búsqueda
+      </ResultsTitle>
 
       <ResultsList>
         {songs.map((song) => (
@@ -22,7 +34,7 @@ function SearchResults({ songs, onAdd }) {
               album={song.album}
               duration={song.duration}
               showButton={true}
-              onAdd={() => onAdd(song)}
+              onAdd={() => handleAddSong(song)}
             />
 
             <DetailLink to={`/song/${song.id}`}>

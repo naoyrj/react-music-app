@@ -28,3 +28,17 @@ export const EmptyMessage = styled.p`
   text-align: center;
   color: ${({ theme }) => theme.colors.textLight};
 `;
+
+export const RemoveButton = styled.button`
+  width: 100%;
+  margin-top: ${({ theme }) => theme.spacing.small};
+  padding: 10px;
+  border: none;
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  background-color: ${({ theme }) => theme.colors.error};
+  color: ${({ theme }) => theme.colors.surface};
+
+  &:hover {
+    opacity: 0.85;
+  }
+`;
