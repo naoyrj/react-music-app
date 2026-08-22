@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import Header from "./components/Header/Header";
 import SearchBar from "./components/SearchBar/SearchBar";
 import SearchResults from "./components/SearchResults/SearchResults";
 import Library from "./components/Library/Library";
 import SongDetail from "./components/SongDetail/SongDetail";
-import useFetch from "./hooks/useFetch";
+
+import { fetchSongs } from "./redux/slices/searchSlice";
 
 import {
   AppContainer,
@@ -17,36 +19,16 @@ import {
 } from "./AppStyles";
 
 function App() {
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const url = searchTerm
-    ? `https://www.theaudiodb.com/api/v1/json/2/searchalbum.php?s=${encodeURIComponent(
-        searchTerm
-      )}`
-    : null;
+  const dispatch = useDispatch();
 
   const {
-    data,
+    results,
     loading,
-    error,
-    retry
-  } = useFetch(url);
+    error
+  } = useSelector((state) => state.search);
 
-  const songs =
-    data && data.album
-      ? data.album.map((album) => ({
-          id: album.idAlbum,
-          title: album.strAlbum,
-          artist: album.strArtist,
-          album: album.strAlbum,
-          duration: album.intYearReleased
-            ? `Año: ${album.intYearReleased}`
-            : "No disponible"
-        }))
-      : [];
-
-  const handleSearch = (artist) => {
-    setSearchTerm(artist);
+  const handleRetry = () => {
+    dispatch(fetchSongs("Coldplay"));
   };
 
   return (
@@ -58,13 +40,7 @@ function App() {
           path="/"
           element={
             <Main>
-              <SearchBar onSearch={handleSearch} />
-
-              {!searchTerm && (
-                <AppMessage>
-                  Busca un artista para ver sus álbumes.
-                </AppMessage>
-              )}
+              <SearchBar />
 
               {loading && (
                 <AppMessage>
@@ -76,10 +52,9 @@ function App() {
                 <ErrorBox>
                   <p>
                     Hubo un problema al cargar los datos.
-                    Intenta nuevamente.
                   </p>
 
-                  <RetryButton onClick={retry}>
+                  <RetryButton onClick={handleRetry}>
                     Reintentar
                   </RetryButton>
                 </ErrorBox>
@@ -87,17 +62,16 @@ function App() {
 
               {!loading &&
                 !error &&
-                searchTerm &&
-                songs.length === 0 && (
-                  <AppMessage>
-                    No se encontraron resultados.
-                  </AppMessage>
+                results.length > 0 && (
+                  <SearchResults />
                 )}
 
               {!loading &&
                 !error &&
-                songs.length > 0 && (
-                  <SearchResults songs={songs} />
+                results.length === 0 && (
+                  <AppMessage>
+                    Busca un artista para ver resultados.
+                  </AppMessage>
                 )}
 
               <Library />

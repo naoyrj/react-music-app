@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Song from "../Song/Song";
-import { removeSong } from "../../redux/libraryActions";
+import { removeSong } from "../../redux/slices/librarySlice";
 
 import {
   LibrarySection,
@@ -13,7 +13,10 @@ import {
 } from "./styles";
 
 function Library() {
-  const songs = useSelector((state) => state);
+  const songs = useSelector(
+    (state) => state.library
+  );
+
   const dispatch = useDispatch();
 
   const handleRemoveSong = (songId) => {
@@ -22,7 +25,9 @@ function Library() {
 
   return (
     <LibrarySection>
-      <LibraryTitle>Mi biblioteca</LibraryTitle>
+      <LibraryTitle>
+        Mi biblioteca
+      </LibraryTitle>
 
       {songs.length === 0 ? (
         <EmptyMessage>
@@ -41,7 +46,9 @@ function Library() {
               />
 
               <RemoveButton
-                onClick={() => handleRemoveSong(song.id)}
+                onClick={() =>
+                  handleRemoveSong(song.id)
+                }
               >
                 Eliminar
               </RemoveButton>
